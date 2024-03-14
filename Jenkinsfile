@@ -1,12 +1,9 @@
 pipeline {
-	agent any 
+	agent any
 	
-	triggers {
-  pollSCM '* * * * *'
-}
 	parameters {
-  choice choices: ['DEV', 'QA', 'UAT'], name: 'environment'
-}
+		choice(name: 'ENVIRONMENT', choices: ['QA','UAT'], description: 'Pick Environment value')
+	}
 	stages {
 	    stage('Checkout') {
 	        steps {
@@ -14,15 +11,21 @@ pipeline {
 		      }}
 		stage('Build') {
 	           steps {
-			  sh '/home/swapnil/Documents/DevOps-Software/apache-maven-3.9.4/bin/mvn install'
+			  sh '/home/lina/Documents/extract_tar_files/apache-maven-3.9.6'
 	                 }}
 		stage('Deployment'){
-		   steps {
-		sh 'cp target/CICD.war /home/swapnil/Documents/DevOps-Software/apache-tomcat-9.0.79/webapps'
-			}}
-		stage('slack-notification'){
-		   steps {
-		     
-		     slackSend baseUrl: 'https://hooks.slack.com/services/', channel: '#devops', color: 'good', message: 'This is for test', teamDomain: 'student', tokenCredentialId: 'slacktest'
-		     }}	
+		    steps {
+			script {
+			 if ( env.ENVIRONMENT == 'QA' ){
+        	sh 'cp target/CICD.war /home/lina/Documents/extract_tar_files/apache-tomcat-9.0.85/webapps'
+        	echo "deployment has been done on QA!"
+			 }
+			elif ( env.ENVIRONMENT == 'UAT' ){
+    		sh 'cp target/CICD.war /home/lina/Documents/extract_tar_files/apache-tomcat-9.0.85/webapps'
+    		echo "deployment has been done on UAT!"
+			}
+			echo "deployment has been done!"
+			fi
+			
+			}}}	
 }}
