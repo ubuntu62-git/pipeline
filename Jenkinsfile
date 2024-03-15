@@ -17,11 +17,11 @@ pipeline {
 		    steps {
 			script {
 			 if ( env.ENVIRONMENT == 'QA' ){
-        	sh 'cp target/CICD.war /home/lina/Documents/extract_tar_files/apache-tomcat-9.0.85/webapps'
+        	sh 'cp target/pipeline.war /home/lina/Documents/extract_tar_files/apache-tomcat-9.0.85/webapps'
         	echo "deployment has been done on QA!"
 			 }
 			elif ( env.ENVIRONMENT == 'UAT' ){
-    		sh 'cp target/CICD.war /home/lina/Documents/extract_tar_files/apache-tomcat-9.0.85/webapps'
+    		sh 'cp target/pipeline.war /home/lina/Documents/extract_tar_files/apache-tomcat-9.0.85/webapps'
     		echo "deployment has been done on UAT!"
 			}
 			echo "deployment has been done!"
